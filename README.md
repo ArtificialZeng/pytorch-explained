@@ -1,6 +1,19 @@
 # pytorch-explained
-pytorch-explained annatated
 
+
+* [/torch/](./torch/)
+   *  [/torch/nn/](./torch/nn/)
+       *  [/torch/nn/modules/](./torch/nn/modules/)    
+          *  [module.py](/torch/nn/modules/module.py)
+              * class Module:
+ 
+       
+* [/mpu/](./mpu/) 并行处理单元
+  * [\__init__.py](/mpu/__init__.py)
+  * [transformer.py](/mpu/transformer.py)
+    * class PositionalEmbedding(torch.nn.Module):
+    * class ParallelCrossAttention(torch.nn.Module):
+    * class ParallelSelfAttention(torch.nn.Module):
 
 ### 示例 
 
