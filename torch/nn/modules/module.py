@@ -421,43 +421,44 @@ class Module:
     version number and do appropriate changes if the state dict is from before
     the change."""
 
-    training: bool
-    _parameters: Dict[str, Optional[Parameter]]
-    _buffers: Dict[str, Optional[Tensor]]
-    _non_persistent_buffers_set: Set[str]
+    training: bool  #这是一个布尔值，用于表示模块当前是在训练模式（True）还是在评估模式（False）。
+    _parameters: Dict[str, Optional[Parameter]]  #这是一个字典，用于存储模块的参数。字典的键是参数的名称，值是 Parameter 类型的实例或 None。
+    _buffers: Dict[str, Optional[Tensor]]  #这是一个字典，用于存储模块的缓冲区。字典的键是缓冲区的名称，值是 Tensor 类型的实例或 None。
+    _non_persistent_buffers_set: Set[str]  #是一个集合，用于存储非持久性缓冲区的名称。持久性缓冲区会被包含在模块的状态字典中，而非持久性缓冲区则不会。
     _backward_pre_hooks: Dict[int, Callable]
-    _backward_hooks: Dict[int, Callable]
-    _is_full_backward_hook: Optional[bool]
-    _forward_hooks: Dict[int, Callable]
+    _backward_hooks: Dict[int, Callable]  #两行定义了两个字典，用于存储模块的反向传播钩子。字典的键是钩子的编号，值是钩子的回调函数。
+    _is_full_backward_hook: Optional[bool]  #是一个布尔值，用于表示是否完全使用反向钩子。如果为 None，表示尚未设置。
+    _forward_hooks: Dict[int, Callable]  #是一个字典，用于存储模块的前向传播钩子。字典的键是钩子的编号，值是钩子的回调函数。
     # Marks whether the corresponding _forward_hooks accept kwargs or not.
     # As JIT does not support Set[int], this dict is used as a set, where all
     # hooks represented in this dict accept kwargs.
-    _forward_hooks_with_kwargs: Dict[int, bool]
+    _forward_hooks_with_kwargs: Dict[int, bool]  #这是一个字典，用于标记对应的前向传播钩子是否接受关键字参数。
     # forward hooks that should always be called even if an exception is raised
-    _forward_hooks_always_called: Dict[int, bool]
-    _forward_pre_hooks: Dict[int, Callable]
+    _forward_hooks_always_called: Dict[int, bool]  #是一个字典，用于标记对应的前向传播钩子在遇到异常时是否仍然需要被调用。
+    _forward_pre_hooks: Dict[int, Callable]  #一个字典，用于存储在前向传播之前需要被调用的钩子。
     # Marks whether the corresponding _forward_hooks accept kwargs or not.
     # As JIT does not support Set[int], this dict is used as a set, where all
     # hooks represented in this dict accept kwargs.
-    _forward_pre_hooks_with_kwargs: Dict[int, bool]
+    _forward_pre_hooks_with_kwargs: Dict[int, bool]  #字典，用于标记对应的前向传播前的钩子是否接受关键字参数。
     _state_dict_hooks: Dict[int, Callable]
     _load_state_dict_pre_hooks: Dict[int, Callable]
     _state_dict_pre_hooks: Dict[int, Callable]
-    _load_state_dict_post_hooks: Dict[int, Callable]
-    _modules: Dict[str, Optional['Module']]
-    call_super_init: bool = False
-    _compiled_call_impl : Optional[Callable] = None
+    _load_state_dict_post_hooks: Dict[int, Callable]  #都是字典，用于存储在保存和加载模块的状态字典时需要被调用的钩子。
+    _modules: Dict[str, Optional['Module']]  #字典，用于存储模块的子模块。字典的键是子模块的名称，值是子模块的实例或 None。
+    call_super_init: bool = False  #一个布尔值，用于标记在子类的初始化方法中是否需要调用父类的初始化方法。
+    _compiled_call_impl : Optional[Callable] = None  #可选的回调函数，用于存储经过优化后的调用实现。如果为 None，表示尚未设置。
 
 
-
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args, **kwargs) -> None:  # 这是 `Module` 类的初始化方法
         """
         Initializes internal Module state, shared by both nn.Module and ScriptModule.
         """
+        # 当创建类的新实例时，会调用此方法
 
-        torch._C._log_api_usage_once("python.nn_module")
+        torch._C._log_api_usage_once("python.nn_module")  # 记录 `nn.Module` 被使用的次数
 
         # Backward compatibility: no args used to be allowed when call_super_init=False
+        # 如果 `call_super_init` 为 `False` 并且提供了额外的参数，则会抛出错误
         if self.call_super_init is False and bool(kwargs):
             raise TypeError("{}.__init__() got an unexpected keyword argument '{}'"
                             "".format(type(self).__name__, next(iter(kwargs))))
@@ -465,6 +466,7 @@ class Module:
         if self.call_super_init is False and bool(args):
             raise TypeError("{}.__init__() takes 1 positional argument but {} were"
                             " given".format(type(self).__name__, len(args) + 1))
+        # 这些代码主要是做一些错误检查和参数验证，以确保模块能够正确地初始化
 
         """
         Calls super().__setattr__('a', a) instead of the typical self.a = a
