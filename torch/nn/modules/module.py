@@ -474,28 +474,29 @@ class Module:
         handling for parameters, submodules, and buffers but simply calls into
         super().__setattr__ for all other attributes.
         """
-        super().__setattr__('training', True)
-        super().__setattr__('_parameters', OrderedDict())
-        super().__setattr__('_buffers', OrderedDict())
-        super().__setattr__('_non_persistent_buffers_set', set())
+        super().__setattr__('training', True)  #将 training 属性设置为 True，表示模块处于训练模式。
+        super().__setattr__('_parameters', OrderedDict())  #将 _parameters 属性设置为一个空的 OrderedDict，用于存储模块的参数。
+        super().__setattr__('_buffers', OrderedDict())  #将 _buffers 属性设置为一个空的 OrderedDict，用于存储模块的缓冲区。
+        super().__setattr__('_non_persistent_buffers_set', set())  #将 _non_persistent_buffers_set 属性设置为一个空的集合，用于存储非持久性缓冲区的名称。
         super().__setattr__('_backward_pre_hooks', OrderedDict())
-        super().__setattr__('_backward_hooks', OrderedDict())
-        super().__setattr__('_is_full_backward_hook', None)
-        super().__setattr__('_forward_hooks', OrderedDict())
+        super().__setattr__('_backward_hooks', OrderedDict())  #将 _backward_pre_hooks 和 _backward_hooks 属性分别设置为两个空的 OrderedDict，用于存储模块的反向传播钩子。
+        super().__setattr__('_is_full_backward_hook', None)  #将 _is_full_backward_hook 属性设置为 None，表示尚未设置是否完全使用反向钩子。
+        super().__setattr__('_forward_hooks', OrderedDict())  #将 _forward_hooks 属性设置为一个空的 OrderedDict，用于存储模块的前向传播钩子。
         super().__setattr__('_forward_hooks_with_kwargs', OrderedDict())
-        super().__setattr__('_forward_hooks_always_called', OrderedDict())
-        super().__setattr__('_forward_pre_hooks', OrderedDict())
-        super().__setattr__('_forward_pre_hooks_with_kwargs', OrderedDict())
+        super().__setattr__('_forward_hooks_always_called', OrderedDict()) #这两行代码将 _forward_hooks_with_kwargs 和 _forward_hooks_always_called 属性分别设置为两个空的 OrderedDict，用于标记对应的前向传播钩子的特性。
+        super().__setattr__('_forward_pre_hooks', OrderedDict()) #将 _forward_pre_hooks 属性设置为一个空的 OrderedDict，用于存储在前向传播之前需要被调用的钩子。
+        super().__setattr__('_forward_pre_hooks_with_kwargs', OrderedDict())  #将 _forward_pre_hooks_with_kwargs 属性设置为一个空的 OrderedDict，用于标记对应的前向传播前的钩子是否接受关键字参数。
         super().__setattr__('_state_dict_hooks', OrderedDict())
         super().__setattr__('_state_dict_pre_hooks', OrderedDict())
         super().__setattr__('_load_state_dict_pre_hooks', OrderedDict())
-        super().__setattr__('_load_state_dict_post_hooks', OrderedDict())
-        super().__setattr__('_modules', OrderedDict())
+        super().__setattr__('_load_state_dict_post_hooks', OrderedDict())#这些行代码将 _state_dict_hooks、_load_state_dict_pre_hooks、_state_dict_pre_hooks 和 _load_state_dict_post_hooks 属性分别设置为四个空的 OrderedDict，用于存储在保存和加载模块的状态字典时需要被调用的钩子。
+        super().__setattr__('_modules', OrderedDict()) #将 _modules 属性设置为一个空的 OrderedDict，用于存储模块的子模块。
 
         if self.call_super_init:
-            super().__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)  #检查 call_super_init 属性是否为 True，如果是，则调用父类的初始化方法。
 
-    forward: Callable[..., Any] = _forward_unimplemented
+
+    forward: Callable[..., Any] = _forward_unimplemented  #将 forward 属性设置为一个未实现的方法，该方法将在子类中被覆盖，用于定义模块的前向传播。
 
     def register_buffer(self, name: str, tensor: Optional[Tensor], persistent: bool = True) -> None:
         r"""Adds a buffer to the module.
