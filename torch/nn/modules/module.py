@@ -373,9 +373,11 @@ def _forward_unimplemented(self, *input: Any) -> None:
 
 
 class Module:
-    r"""Base class for all neural network modules.
+    r"""所有网络的基类。
 
-    Your models should also subclass this class.
+           你的模型也应该继承这个类。
+
+           Modules也可以包含其它Modules,允许使用树结构嵌入他们。你可以将子模块赋值给模型属性。
 
     Modules can also contain other Modules, allowing to nest them in
     a tree structure. You can assign the submodules as regular attributes::
